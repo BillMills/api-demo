@@ -10,13 +10,18 @@ public class Dblookup {
 
         double p=0.00;
 
-        try(Connection conn = DriverManager.getConnection("jdbc:mariadb://mariadb:3306/demo", "pika", "rosebud");
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * from PRODUCTS WHERE name='"+name+"'")){
+        try {
+            // query template
+            String query = "SELECT * from PRODUCTS WHERE name=?";
             
-            rs.first();
-            System.out.println(rs.getString(1));
+            // connect and execute
+            Connection conn = DriverManager.getConnection("jdbc:mariadb://mariadb:3306/demo", "pika", "rosebud");
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
 
+            // extract price
+            rs.first();
             p=Double.parseDouble(rs.getString(1));
         } catch (SQLException e) {
             e.printStackTrace();
