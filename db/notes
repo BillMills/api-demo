@@ -1,0 +1,33 @@
+docker container run --name mariadb --network dblink -e MYSQL_DATABASE=demo -e MYSQL_USER=pika -e MYSQL_PASSWORD=rosebud -e MYSQL_RANDOM_ROOT_PASSWORD=yes -d mariadb:10.2
+
+docker container run -it --network dblink --rm mariadb:10.2 sh -c 'exec mysql -h"mariadb" -P"3306" -upika -prosebud'
+Enter password: 
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 8
+Server version: 10.2.22-MariaDB-1:10.2.22+maria~bionic mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> USE demo;
+Database changed
+MariaDB [demo]> CREATE TABLE PRODUCTS(PRICE FLOAT, NAME TEXT);
+Query OK, 0 rows affected (0.01 sec)
+
+MariaDB [demo]> INSERT INTO PRODUCTS VALUES('18.95', 'widget');
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [demo]> INSERT INTO PRODUCTS VALUES('1.45', 'sprocket');
+Query OK, 1 row affected (0.01 sec)
+
+MariaDB [demo]> select * from PRODUCTS;
++-------+----------+
+| PRICE | NAME     |
++-------+----------+
+| 18.95 | widget   |
+|  1.45 | sprocket |
++-------+----------+
+2 rows in set (0.00 sec)
+
+MariaDB [demo]> \q
